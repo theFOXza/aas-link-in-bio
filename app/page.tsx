@@ -2,10 +2,18 @@
 
 import { useState } from 'react'
 
-// UTM tracking helper
-const addUtm = (url: string, source: string = 'tiktok', medium: string = 'linkinbio') => {
+// UTM tracking helper - reads source from URL params (set by middleware)
+const getUtmSource = () => {
+  if (typeof window === 'undefined') return ''
+  const params = new URLSearchParams(window.location.search)
+  return params.get('utm_source') || ''
+}
+
+const addUtm = (url: string) => {
+  const source = getUtmSource()
+  if (!source) return url
   const separator = url.includes('?') ? '&' : '?'
-  return `${url}${separator}utm_source=${source}&utm_medium=${medium}&utm_campaign=bio_links`
+  return `${url}${separator}utm_source=${source}&utm_medium=linkinbio&utm_campaign=bio_links`
 }
 
 const links = [
